@@ -17,7 +17,7 @@ sys.setdefaultencoding( "utf-8" )
 
 friend = '563679994' # 朋友的QQ号，朋友的空间要求允许你能访问
 user = '563679994'  # 你的QQ号
-pw = 'lzl19881004'  # 你的QQ密码
+pw = 'XXX'  # 你的QQ密码
 
 #获取浏览器驱动
 driver = webdriver.Firefox()
