@@ -47,4 +47,4 @@ def create_word_cloud(filename):
 
 
 if __name__ == '__main__':
-    create_word_cloud('word_py')
+    create_word_cloud('fenng_wb')
