@@ -9,19 +9,19 @@
 import time
 from selenium import webdriver
 from lxml import etree
+import wordcloud as wcp
 import sys
-import datetime
-
-import word_cloud_py  as wcp
 
 
 reload(sys)
+#这里需要指定字符编码
 sys.setdefaultencoding( "utf-8" )
 
 def get_content(f_name):
 
-    username = 'XXX'
-    psd = 'XXX'
+    #你的微博帐号
+    username = 'hg_liuzl@qq.com'
+    psd = 'lzl3434513'
 
     #获取浏览器驱动
     driver = webdriver.Firefox()
@@ -31,12 +31,19 @@ def get_content(f_name):
 
     driver.get('http://weibo.com/login.php')
     print('login............................')
+
+    #给登录框与密码赋值
     driver.find_element_by_id('loginname').send_keys(username)
     driver.find_element_by_class_name('password').find_element_by_name('password').send_keys(psd)
+
+    #点击登录按钮
     driver.find_element_by_xpath('//*[@id="pl_login_form"]/div/div[3]/div[6]/a/span').click()
 
-    # 浏览器地址定向到大辉老师的微博列表页，没有什么技巧，自己去找的
-    driver.get("https://weibo.com/p/1005051577826897/home?from=page_100505_profile&wvr=6&mod=data&is_hot=1#_loginLayer_1517486254960")
+    # 这里因为登录，需要有一个延时，不能直接切换到新网页去
+    time.sleep(3)
+
+    # 登录成功后，再用浏览器地址定向到大辉老师的微博列表页，没有什么技巧，自己去找的
+    driver.get("https://weibo.com/p/1005051577826897/home?from=page_100505_profile&wvr=6&mod=data&is_all=1#place")
 
     while True:
             # 下拉滚动条，从1开始到3结束 分2次加载完每页数据
@@ -61,19 +68,17 @@ def get_content(f_name):
                     print wb_content, wb_time
                     f.write(wb_content+'\n')
 
-            break
-
-            #分析得知当为最后一页时，最后的ui-pager-next不见了
+            #分析得知当为最后一页时，最后的page next S_txt1 S_line1不见了
             if driver.page_source.find('page next S_txt1 S_line1') == -1:
+                print '没有下一页了'
                 break
 
-            # 找到“下一页”的按钮元素
-            driver.find_element_by_class_name('page next S_txt1 S_line1').click()
-
-            # 因为在下一个循环里首先还要把页面下拉，所以要跳到外层的frame上
-            driver.switch_to.parent_frame()
+            # 找到“下一页”的按钮元素，原本想用xpath与classname，都失败了
+            # 这里我是用css来定位的，page next S_txt1 S_line1 在空格之间加'.' 来连接
+            submit = driver.find_element_by_css_selector('.page.next.S_txt1.S_line1')
+            submit.click()
 
 if __name__ == '__main__':
-    f_name = 'dahui'
+    f_name = 'ddddd'
     get_content(f_name)
     wcp.create_word_cloud(f_name)
