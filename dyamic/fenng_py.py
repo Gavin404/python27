@@ -20,8 +20,8 @@ sys.setdefaultencoding( "utf-8" )
 def get_content(f_name):
 
     #你的微博帐号
-    username = 'hg_liuzl@qq.com'
-    psd = 'lzl3434513'
+    username = '******'
+    psd = '******'
 
     #获取浏览器驱动
     driver = webdriver.Firefox()
